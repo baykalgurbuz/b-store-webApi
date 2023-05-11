@@ -80,5 +80,16 @@ namespace WebApi.AddControllers
             book.Title=updateBook.Title != default ? updateBook.Title : book.Title;
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteBook(int id)
+        {
+            var book = BookList.SingleOrDefault(x=>x.Id==id);
+            if(book is not null)
+                return BadRequest();
+            
+            BookList.Remove(book);
+            return Ok();
+        }
     }
 }
