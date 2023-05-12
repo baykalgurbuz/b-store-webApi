@@ -10,27 +10,7 @@ namespace WebApi.AddControllers
     public class BookController : ControllerBase
     {
         private static List<Book> BookList = new List<Book>(){
-            new Book{
-                Id=1,
-                Title="Böyle Söyledi Zerdüst",
-                GenreId=1,
-                PageCount=350,
-                PublishDate=new DateTime(2001,06,12)
-            },
-            new Book{
-                Id=2,
-                Title="Savas Sanatı",
-                GenreId=2,
-                PageCount=150,
-                PublishDate=new DateTime(2000,06,12)
-            },
-            new Book{
-                Id=3,
-                Title="Yer Altindan Notlar",
-                GenreId=2,
-                PageCount=250,
-                PublishDate=new DateTime(2003,06,12)
-            }
+         
         };
 
 
