@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.BookOperations.CreateBook;
 using WebApi.BookOperations.DeleteBook;
@@ -18,43 +19,17 @@ namespace WebApi.AddControllers
     public class BookController : ControllerBase
     {
         private readonly BookStoreDbContext _context;
-
-        public BookController(BookStoreDbContext context)
+        private readonly IMapper _mapper;
+        public BookController(BookStoreDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        // private static List<Book> BookList = new List<Book>(){
-        //    new Book
-        //              {
-        //                  Id = 1,
-        //                  Title = "Böyle Söyledi Zerdüst",
-        //                  GenreId = 1,
-        //                  PageCount = 350,
-        //                  PublishDate = new DateTime(2001, 06, 12)
-        //              },
-        //              new Book
-        //              {
-        //                  Id = 2,
-        //                  Title = "Savas Sanatı",
-        //                  GenreId = 2,
-        //                  PageCount = 150,
-        //                  PublishDate = new DateTime(2000, 06, 12)
-        //              },
-        //              new Book
-        //              {
-        //                  Id = 3,
-        //                  Title = "Yer Altindan Notlar",
-        //                  GenreId = 2,
-        //                  PageCount = 250,
-        //                  PublishDate = new DateTime(2003, 06, 12)
-        //              }
-        // };
-
-
+         
         [HttpGet]
         public IActionResult GetBooks()
         {
-            GetBooksQuery query = new GetBooksQuery(_context);
+            GetBooksQuery query = new GetBooksQuery(_context,_mapper);
             var result = query.Handle();
             return Ok(result);
         }
@@ -65,7 +40,7 @@ namespace WebApi.AddControllers
             BookDetailViewModel result;
             try
             {
-                GetBookDetailQuery query = new GetBookDetailQuery(_context);
+                GetBookDetailQuery query = new GetBookDetailQuery(_context,_mapper);
                 query.BookId = id;
                 result = query.Handle();
             }
@@ -80,17 +55,12 @@ namespace WebApi.AddControllers
             // return book;
         }
 
-        //  [HttpGet]
-        // public Book Get([FromQuery]string id)
-        // {
-        //     var book = BookList.Where(book => book.Id == Convert.ToInt32(id)).SingleOrDefault();
-        //     return book;
-        // }
+       
 
         [HttpPost]
         public IActionResult AddBook([FromBody] CreateBookModel newBook)
         {
-            CreateBookCommand command = new CreateBookCommand(_context);
+            CreateBookCommand command = new CreateBookCommand(_context,_mapper);
             try
             {
                 command.Model = newBook;
@@ -101,13 +71,7 @@ namespace WebApi.AddControllers
                 return BadRequest(ex.Message);
             }
 
-
-            // var book = _context.Books.SingleOrDefault(x=>x.Title==newBook.Title);
-            // if(book is not null)
-            //     return BadRequest();
-
-            // _context.Books.Add(newBook);
-            // _context.SaveChanges();
+ 
             return Ok();
         }
 
